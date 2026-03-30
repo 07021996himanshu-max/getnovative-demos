@@ -42,4 +42,130 @@
     <section class="max-w-7xl mx-auto px-8 py-20 text-center relative">
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#D4AF37] opacity-10 blur-[100px] rounded-full pointer-events-none"></div>
         
-        <h1 class="text-4xl md:text-6xl font-bold mb-6 relative
+        <h1 class="text-4xl md:text-6xl font-bold mb-6 relative z-10">
+            Experience <span class="gold-text">Innovation.</span>
+        </h1>
+        <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-12 relative z-10">
+            Browse through our custom-built, high-converting digital environments. Select a category and explore the live interactive demos below.
+        </p>
+
+        <div id="filter-container" class="flex flex-wrap justify-center gap-4 relative z-10">
+            </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-8 pb-24 flex-grow w-full">
+        <div id="themes-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            </div>
+    </section>
+
+    <footer class="border-t border-gray-800 bg-black text-center py-8 mt-auto">
+        <p class="text-sm text-gray-500">&copy; 2026 Getnovative Solutions. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // 1. DYNAMIC DATA: Future mein bas yahan details add karni hain
+        const themesData = [
+            {
+                id: 1,
+                title: "Ayurveda B2B Portal",
+                category: "e-commerce",
+                description: "A complete end-to-end manufacturing and white-labeling showcase with premium earthy aesthetics.",
+                imageColor: "bg-[#5C3D2E]",
+                imageText: "Ayurveda Premium",
+                link: "ayurveda/index.html",
+                status: "Live Demo"
+            },
+            {
+                id: 2,
+                title: "Real Estate Lead Gen",
+                category: "corporate",
+                description: "High-converting landing page designed specifically for realtors and property consultants.",
+                imageColor: "bg-gray-800",
+                imageText: "Real Estate Pro",
+                link: "real-estate/index.html",
+                status: "Coming Soon"
+            },
+            {
+                id: 3,
+                title: "SaaS Dashboard UI",
+                category: "saas",
+                description: "Modern, dark-themed analytics dashboard for AI and Tech startups.",
+                imageColor: "bg-blue-900",
+                imageText: "AI Analytics",
+                link: "#",
+                status: "Coming Soon"
+            }
+        ];
+
+        // 2. FILTER LOGIC
+        const filters = ["All", "E-Commerce", "Corporate", "SaaS"];
+        let activeFilter = "All";
+
+        const filterContainer = document.getElementById("filter-container");
+        const themesGrid = document.getElementById("themes-grid");
+
+        // Function to render filter buttons
+        function renderFilters() {
+            filterContainer.innerHTML = "";
+            filters.forEach(filter => {
+                const btn = document.createElement("button");
+                const isActive = activeFilter === filter;
+                
+                btn.className = `px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 border ${
+                    isActive 
+                    ? 'bg-[#D4AF37] text-black border-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.4)]' 
+                    : 'bg-transparent text-gray-400 border-gray-700 hover:border-gray-500 hover:text-white'
+                }`;
+                btn.innerText = filter;
+                btn.onclick = () => {
+                    activeFilter = filter;
+                    renderFilters(); // Re-render buttons for active state
+                    renderThemes();  // Re-render grid based on selection
+                };
+                filterContainer.appendChild(btn);
+            });
+        }
+
+        // Function to render theme cards dynamically
+        function renderThemes() {
+            themesGrid.innerHTML = ""; // Clear current grid
+            
+            // Filter the data
+            const filteredThemes = activeFilter === "All" 
+                ? themesData 
+                : themesData.filter(theme => theme.category.toLowerCase() === activeFilter.toLowerCase());
+
+            // Loop through data and create HTML cards
+            filteredThemes.forEach(theme => {
+                const isLive = theme.status === "Live Demo";
+                const btnClass = isLive 
+                    ? "bg-[#D4AF37] text-black hover:bg-white" 
+                    : "bg-gray-800 text-gray-500 cursor-not-allowed";
+
+                const cardHTML = `
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col transition duration-300 group">
+                        <div class="h-48 ${theme.imageColor} relative flex items-center justify-center border-b border-gray-800">
+                            <span class="text-white/80 font-serif text-2xl font-bold tracking-wide group-hover:scale-105 transition duration-500">${theme.imageText}</span>
+                        </div>
+                        
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-xl font-bold mb-2 text-white">${theme.title}</h3>
+                            <p class="text-sm text-gray-400 mb-6 flex-grow leading-relaxed">${theme.description}</p>
+                            
+                            <a href="${isLive ? theme.link : '#'}" ${isLive ? 'target="_blank"' : ''} 
+                               class="w-full text-center font-bold py-3 rounded transition duration-300 ${btnClass}">
+                                ${theme.status} ${isLive ? '&rarr;' : ''}
+                            </a>
+                        </div>
+                    </div>
+                `;
+                themesGrid.innerHTML += cardHTML;
+            });
+        }
+
+        // 3. INITIALIZE PAGE
+        renderFilters();
+        renderThemes();
+    </script>
+</body>
+</html>
